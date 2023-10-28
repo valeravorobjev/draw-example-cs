@@ -1,3 +1,4 @@
+using System.Net.NetworkInformation;
 using SkiaSharp;
 
 /// <summary>
@@ -7,15 +8,37 @@ public abstract class Shape
 {
     public Shape() {}
 
-    public Shape(SKColor color)
+    public Shape(SKColor color, float x, float y)
     {
         Color = color;
+        X = x;
+        Y = y;
+        
+        // Стиль круга
+        SKPaint paint = new SKPaint
+        {
+            Style = SKPaintStyle.Stroke, // Отрисоввывать только обводку круга
+            Color = Color,               // Цвет окружности
+            StrokeWidth = 2              // Толщина контура круга
+        };
+
+        Paint = paint;
     }
     
     /// <summary>
     /// Поле содержит цвет фигуры
     /// </summary>
     public SKColor Color { get; set; }
+    /// <summary>
+    /// Координата позиции круга X
+    /// </summary>
+    public float X { get; set; }
+    /// <summary>
+    /// Координата позиции круга Y
+    /// </summary>
+    public float Y { get; set; }
+    
+    protected SKPaint Paint { get; }
 
     /// <summary>
     /// Мето позволяет отрисовать фигуру
@@ -33,15 +56,6 @@ public abstract class Shape
 public class Circle : Shape
 {
     /// <summary>
-    /// Координата позиции круга X
-    /// </summary>
-    public float X { get; set; }
-    /// <summary>
-    /// Координата позиции круга Y
-    /// </summary>
-    public float Y { get; set; }
-    
-    /// <summary>
     /// Радиус круга
     /// </summary>
     public float Radius { get; set; }
@@ -53,7 +67,7 @@ public class Circle : Shape
     /// <param name="y">Координата y</param>
     /// <param name="radius">Радиус</param>
     /// <param name="color">Цвет</param>
-    public Circle(float x, float y, float radius, SKColor color): base(color)
+    public Circle(float x, float y, float radius, SKColor color): base(color, x, y)
     {
         X = x;
         Y = y;
@@ -66,16 +80,9 @@ public class Circle : Shape
     /// <param name="canvas">Холст</param>
     public override void Draw(SKCanvas canvas)
     {
-        // Стиль круга
-        SKPaint paint = new SKPaint
-        {
-            Style = SKPaintStyle.Stroke, // Отрисоввывать только обводку круга
-            Color = Color,               // Цвет окружности
-            StrokeWidth = 2              // Толщина контура круга
-        };
 
         // Отрисовка круга на холсте
-        canvas.DrawCircle(X, Y, Radius, paint);
+        canvas.DrawCircle(X, Y, Radius, Paint);
     }
 }
 
@@ -84,15 +91,6 @@ public class Circle : Shape
 /// </summary>
 public class Rectagle : Shape
 {
-    /// <summary>
-    /// Координата позиции круга X
-    /// </summary>
-    public float X { get; set; }
-    /// <summary>
-    /// Координата позиции круга Y
-    /// </summary>
-    public float Y { get; set; }
-    
     /// <summary>
     /// Ширина
     /// </summary>
@@ -110,7 +108,7 @@ public class Rectagle : Shape
     /// <param name="width">Шарина</param>
     /// <param name="height">Высота</param>
     /// <param name="color">Цвет</param>
-    public Rectagle(float x, float y, float width, float height, SKColor color) : base(color)
+    public Rectagle(float x, float y, float width, float height, SKColor color) : base(color, x, y)
     {
         X = x;
         Y = y;
@@ -120,15 +118,7 @@ public class Rectagle : Shape
     
     public override void Draw(SKCanvas canvas)
     {
-        // Стиль круга
-        SKPaint paint = new SKPaint
-        {
-            Style = SKPaintStyle.Stroke, // Отрисоввывать только обводку круга
-            Color = Color,               // Цвет окружности
-            StrokeWidth = 2              // Толщина контура круга
-        };
-        
-        canvas.DrawRect(X,Y,Width,Height, paint);
+        canvas.DrawRect(X,Y,Width,Height, Paint);
     }
 }
 
@@ -136,22 +126,12 @@ public class Rectagle : Shape
 public class Point : Shape
 {
     /// <summary>
-    /// Координата позиции круга X
-    /// </summary>
-    public float X { get; set; }
-    /// <summary>
-    /// Координата позиции круга Y
-    /// </summary>
-    public float Y { get; set; }
-
-
-    /// <summary>
     /// Конструктор для базовой инициализации
     /// </summary>
     /// <param name="x">Координана x</param>
     /// <param name="y">Координата y</param>
     /// <param name="color">Цвет</param>
-    public Point(float x, float y, SKColor color) : base(color)
+    public Point(float x, float y, SKColor color) : base(color, x, y)
     {
         X = x;
         Y = y;
@@ -159,14 +139,6 @@ public class Point : Shape
     
     public override void Draw(SKCanvas canvas)
     {
-        // Стиль круга
-        SKPaint paint = new SKPaint
-        {
-            Style = SKPaintStyle.Stroke, // Отрисоввывать только обводку круга
-            Color = Color,               // Цвет окружности
-            StrokeWidth = 2              // Толщина контура круга
-        };
-        
         canvas.DrawPoint(X,Y, Color);
     }
 }
